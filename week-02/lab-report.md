@@ -81,7 +81,7 @@ no external libraries. Return code plus a short explanation.
 3. Raising value error
 4. More simple, readable
 5. Fuction name and exact signature
-6. Only excepting grades [0-100]
+6. Only accepting grades [0-100]
 
 **What B still leaves open:**
 
@@ -95,26 +95,36 @@ no external libraries. Return code plus a short explanation.
 **What I appended to Prompt B:**
 
 ```
-
+Example: analyze_marks([40, 60, 80], 50) → average 60, highest 80, lowest 40,
+pass_rate 66.67. Include tests for: one mark, decimals, custom pass_mark, empty list,
+text value, and marks below 0 or above 100. State any remaining assumptions before
+the code.
 ```
 
 **Tests the AI wrote for itself** — how many, and which situations do they cover?
 
 | Situation | Covered by the AI's tests? |
 | --- | --- |
-| one mark | |
-| decimals | |
-| custom pass_mark | |
-| empty list | |
-| text value | |
-| below 0 / above 100 | |
+| one mark | yes |
+| decimals | yes |
+| custom pass_mark | yes |
+| empty list | yes |
+| text value | yes |
+| below 0 / above 100 | yes |
 
 **Do the AI's own tests pass against the AI's own code?** yes / no
+Yes
 
-**Do they agree with the harness in section 6?** yes / no — if no, where do they disagree:
+**Do they agree with the harness in section 6?** yes / no — if no, where do they disagree: Yes
 
 **Assumptions C stated explicitly before the code:**
-
+Assumptions (please confirm if any need to change):
+pass_rate is rounded to 2 decimal places (matching the example's 66.67); average is also rounded to 2 decimal places for readability, while highest/lowest are returned unrounded (they're just the raw max/min).
+"Pass" means a mark ≥ pass_mark (inclusive).
+Booleans (True/False) are rejected even though Python treats bool as a subclass of int.
+A list with a single mark is valid — average equals that mark, and pass_rate is either 0.0 or 100.0.
+marks must be a list (not a generator, tuple, etc.); adjust if you need broader input support.
+Boundary values 0 and 100 are valid marks (range check is 0 <= m <= 100).
 ---
 
 ## 5. Prompt D — my combined prompt
@@ -122,14 +132,14 @@ no external libraries. Return code plus a short explanation.
 **The complete prompt I wrote** (one message, sent to a fresh chat):
 
 ```
-
+Write python code for analyzing student's marks. Function  should accept list of marks and custom pass_rate. Output is average  highest lowest pass_rate(with 2 decimal). Marks are strictly between 0 and 100. Raise value error if boolean, string, non valid marks and empty list. Except marks with decimal
 ```
 
 **What I deliberately added that A, B and C did not have:**
 
-1.
-2.
-3.
+1. Explain everything in one prompt
+2. Marks are strictly in [0-100]
+3. Accepts marks with decimal
 
 **The ambiguity I found in the specification, and how I resolved it inside Prompt D:**
 
@@ -141,20 +151,20 @@ Six cases × four prompts. Verdicts are **PASS**, **FAIL** or **ERROR** only.
 
 | # | Call | Required | A | B | C | D |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `analyze_marks([40, 60, 80], 50)` | avg 60 · high 80 · low 40 · rate 66.67 | | | | |
-| 2 | `analyze_marks([100], 50)` | avg 100 · high 100 · low 100 · rate 100 | | | | |
-| 3 | `analyze_marks([49.5, 50], 50)` | avg 49.75 · high 50 · low 49.5 · rate 50 | | | | |
-| 4 | `analyze_marks([], 50)` | raises ValueError | | | | |
-| 5 | `analyze_marks([40, "60"], 50)` | raises ValueError | | | | |
-| 6 | `analyze_marks([-1, 50, 101], 50)` | raises ValueError | | | | |
+| 1 | `analyze_marks([40, 60, 80], 50)` | avg 60 · high 80 · low 40 · rate 66.67 |fail | fail | | |
+| 2 | `analyze_marks([100], 50)` | avg 100 · high 100 · low 100 · rate 100 | fail | pass | | |
+| 3 | `analyze_marks([49.5, 50], 50)` | avg 49.75 · high 50 · low 49.5 · rate 50 | fail | pass | | |
+| 4 | `analyze_marks([], 50)` | raises ValueError | fail | pass | | |
+| 5 | `analyze_marks([40, "60"], 50)` | raises ValueError | fail | pass | | |
+| 6 | `analyze_marks([-1, 50, 101], 50)` | raises ValueError | fail | pass | | |
 | | **Totals** | | /6 | /6 | /6 | /6 |
 
 **For every FAIL and ERROR above, one line: what was returned or raised instead.**
 
 | Prompt | Case | What actually happened |
 | --- | --- | --- |
-| | | |
-| | | |
+| A | All | Keys are different, accepts all int |
+| B | 1 | pass_rate is not 2 decimal |
 | | | |
 
 ### Pasted terminal output — all four runs

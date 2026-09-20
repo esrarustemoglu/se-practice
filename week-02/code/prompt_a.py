@@ -76,12 +76,10 @@ def print_report(students):
 if __name__ == "__main__":
     # Example data — replace with your own student marks
     student_marks = {
-        "Alice": 92,
-        "Bob": 76,
-        "Charlie": 58,
-        "Diana": 84,
-        "Ethan": 67,
-        "Fiona": 95,
+        "Alice": -1,
+        "Bob": 60,
+        "Charlie": 80,
+        
     }
 
     print_report(student_marks)
