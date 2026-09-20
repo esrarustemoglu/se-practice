@@ -39,26 +39,28 @@ used Python
 **Prompt sent** (should be exactly one sentence):
 
 ```
-
+Write Python code to analyze student marks.
 ```
 
 **Assumptions the AI made that I never gave it** — list them, one per line. A data format, a pass
 threshold, a rounding rule, an input method, an invented feature all count.
 
-1.
-2.
-3.
+1. Input data format is dictionary
+2. Passing mark is 60, letter scale of marks
+3. Rounding rule - 2 decimal
+4. Input method is 'if __name__ = "__main__"' block
 
 **Questions it should have asked and did not:**
 
-1.
-2.
+1. What input and data format would you choose?
+2. Specific garding policy 
 
-**Is the function named `analyze_marks` with the required signature?** yes / no — if no, what is it
+**Is the function named `analyze_marks` with the required signature?** yes / no — yes. 
+if no, what is it
 called:
 
 **First impression before testing** (one sentence — you will compare this with section 6 later):
-
+The code is clean, readable, handles small cases. But accepts all grades like -5 and 108
 ---
 
 ## 3. Prompt B — structured context
@@ -66,18 +68,25 @@ called:
 **Prompt sent** (paste it in full, including any substitutions):
 
 ```
-
+You are a Python developer. Implement analyze_marks(marks, pass_mark=50). Return
+average, highest, lowest, and pass_rate in a dictionary. Accept marks from 0 to 100;
+raise ValueError for an empty list, non-numeric values, or out-of-range values. Use
+no external libraries. Return code plus a short explanation.
 ```
 
 **What B fixed compared to A:**
 
-1.
-2.
+1. Pass mark is 50
+2. Pass rate added
+3. Raising value error
+4. More simple, readable
+5. Fuction name and exact signature
+6. Only excepting grades [0-100]
 
 **What B still leaves open:**
 
-1.
-2.
+1. Not passing invalid value raising error
+2. Input type not specified
 
 ---
 
