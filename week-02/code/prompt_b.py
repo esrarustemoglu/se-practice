@@ -30,5 +30,4 @@ Validation loop: checks each mark is a real number (int/float, with bool explici
 Calculations: average is the mean, highest/lowest use built-in max/min, and pass_rate is the percentage of marks meeting or exceeding pass_mark (default 50).
 No imports needed — just built-in sum, max, min, and len.
 """
-print(analyze_marks([]))
 

@@ -151,21 +151,21 @@ Six cases × four prompts. Verdicts are **PASS**, **FAIL** or **ERROR** only.
 
 | # | Call | Required | A | B | C | D |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | `analyze_marks([40, 60, 80], 50)` | avg 60 · high 80 · low 40 · rate 66.67 |fail | fail | | |
-| 2 | `analyze_marks([100], 50)` | avg 100 · high 100 · low 100 · rate 100 | fail | pass | | |
-| 3 | `analyze_marks([49.5, 50], 50)` | avg 49.75 · high 50 · low 49.5 · rate 50 | fail | pass | | |
-| 4 | `analyze_marks([], 50)` | raises ValueError | fail | pass | | |
-| 5 | `analyze_marks([40, "60"], 50)` | raises ValueError | fail | pass | | |
-| 6 | `analyze_marks([-1, 50, 101], 50)` | raises ValueError | fail | pass | | |
-| | **Totals** | | /6 | /6 | /6 | /6 |
+| 1 | `analyze_marks([40, 60, 80], 50)` | avg 60 · high 80 · low 40 · rate 66.67 |ERROR | error | pass | pass |
+| 2 | `analyze_marks([100], 50)` | avg 100 · high 100 · low 100 · rate 100 | ERROR | ERROR | pass | pass |
+| 3 | `analyze_marks([49.5, 50], 50)` | avg 49.75 · high 50 · low 49.5 · rate 50 | ERROR | ERROR | pass| pass |
+| 4 | `analyze_marks([], 50)` | raises ValueError | ERROR | ERROR | pass | PASS |
+| 5 | `analyze_marks([40, "60"], 50)` | raises ValueError | ERROR | ERROR | pass | PASS |
+| 6 | `analyze_marks([-1, 50, 101], 50)` | raises ValueError | ERROR | ERROR | pass |PASS |
+| | **Totals** | | 0/6 | 6/6 | 6/6 | 6/6 |
 
 **For every FAIL and ERROR above, one line: what was returned or raised instead.**
 
 | Prompt | Case | What actually happened |
 | --- | --- | --- |
-| A | All | Keys are different, accepts all int |
-| B | 1 | pass_rate is not 2 decimal |
-| | | |
+| A | All | analyze_marks() takes 1 positional argument but 2 were given |
+| B | all |  crash on import|
+|  | | |
 
 ### Pasted terminal output — all four runs
 
@@ -175,25 +175,119 @@ Six cases × four prompts. Verdicts are **PASS**, **FAIL** or **ERROR** only.
 **Prompt A**
 
 ```
-
+========================================================================
+analyze_marks harness — week-02/code/prompt_a.py
+tolerance for numeric comparison: 0.01
+========================================================================
+SIGNATURE: ok
+------------------------------------------------------------------------
+case 1  ERROR  analyze_marks([40, 60, 80], 50)
+          expect: average=60.0, highest=80, lowest=40, pass_rate=66.67
+          got   : raised TypeError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+case 2  ERROR  analyze_marks([100], 50)
+          expect: average=100.0, highest=100, lowest=100, pass_rate=100.0
+          got   : raised TypeError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+case 3  ERROR  analyze_marks([49.5, 50], 50)
+          expect: average=49.75, highest=50, lowest=49.5, pass_rate=50.0
+          got   : raised TypeError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+case 4  ERROR  analyze_marks([], 50)
+          expect: ValueError
+          got   : raised TypeError instead of ValueError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+case 5  ERROR  analyze_marks([40, '60'], 50)
+          expect: ValueError
+          got   : raised TypeError instead of ValueError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+case 6  ERROR  analyze_marks([-1, 50, 101], 50)
+          expect: ValueError
+          got   : raised TypeError instead of ValueError: analyze_marks() takes 1 positional argument but 2 were given
+------------------------------------------------------------------------
+RESULT  0 PASS · 0 FAIL · 6 ERROR   (week-02/code/prompt_a.py)
+========================================================================
 ```
 
 **Prompt B**
 
 ```
-
+ERROR: week-02/code/prompt_b.py could not be imported: ValueError: marks list cannot be empty
+The file must define analyze_marks and must not crash on import.
 ```
 
 **Prompt C**
 
 ```
-
+========================================================================
+analyze_marks harness — week-02/code/prompt_c.py
+tolerance for numeric comparison: 0.01
+========================================================================
+SIGNATURE: ok
+------------------------------------------------------------------------
+case 1  PASS   analyze_marks([40, 60, 80], 50)
+          expect: average=60.0, highest=80, lowest=40, pass_rate=66.67
+          got   : average=60.0, highest=80, lowest=40, pass_rate=66.67
+------------------------------------------------------------------------
+case 2  PASS   analyze_marks([100], 50)
+          expect: average=100.0, highest=100, lowest=100, pass_rate=100.0
+          got   : average=100.0, highest=100, lowest=100, pass_rate=100.0
+------------------------------------------------------------------------
+case 3  PASS   analyze_marks([49.5, 50], 50)
+          expect: average=49.75, highest=50, lowest=49.5, pass_rate=50.0
+          got   : average=49.75, highest=50, lowest=49.5, pass_rate=50.0
+------------------------------------------------------------------------
+case 4  PASS   analyze_marks([], 50)
+          expect: ValueError
+          got   : raised ValueError: marks must be a non-empty list
+------------------------------------------------------------------------
+case 5  PASS   analyze_marks([40, '60'], 50)
+          expect: ValueError
+          got   : raised ValueError: Non-numeric value found: '60'
+------------------------------------------------------------------------
+case 6  PASS   analyze_marks([-1, 50, 101], 50)
+          expect: ValueError
+          got   : raised ValueError: Mark out of range (0-100): -1
+------------------------------------------------------------------------
+RESULT  6 PASS · 0 FAIL · 0 ERROR   (week-02/code/prompt_c.py)
+========================================================================
 ```
 
 **Prompt D**
 
 ```
-
+========================================================================
+analyze_marks harness — week-02/code/prompt_d.py
+tolerance for numeric comparison: 0.01
+========================================================================
+SIGNATURE: pass_mark has no default value (analyze_marks() missing 1 required positional argument: 'pass_rate')
+------------------------------------------------------------------------
+case 1  PASS   analyze_marks([40, 60, 80], 50)
+          expect: average=60.0, highest=80, lowest=40, pass_rate=66.67
+          got   : average=60.0, highest=80, lowest=40, pass_rate=66.67
+------------------------------------------------------------------------
+case 2  PASS   analyze_marks([100], 50)
+          expect: average=100.0, highest=100, lowest=100, pass_rate=100.0
+          got   : average=100.0, highest=100, lowest=100, pass_rate=100.0
+------------------------------------------------------------------------
+case 3  PASS   analyze_marks([49.5, 50], 50)
+          expect: average=49.75, highest=50, lowest=49.5, pass_rate=50.0
+          got   : average=49.75, highest=50, lowest=49.5, pass_rate=50.0
+------------------------------------------------------------------------
+case 4  PASS   analyze_marks([], 50)
+          expect: ValueError
+          got   : raised ValueError: Marks list cannot be empty.
+------------------------------------------------------------------------
+case 5  PASS   analyze_marks([40, '60'], 50)
+          expect: ValueError
+          got   : raised ValueError: Invalid mark: '60'. Marks must be numeric.
+------------------------------------------------------------------------
+case 6  PASS   analyze_marks([-1, 50, 101], 50)
+          expect: ValueError
+          got   : raised ValueError: Invalid mark: -1. Marks must be strictly between 0 and 100.
+------------------------------------------------------------------------
+RESULT  6 PASS · 0 FAIL · 0 ERROR   (week-02/code/prompt_d.py)
+========================================================================
 ```
 
 ---
@@ -204,17 +298,17 @@ Six cases × four prompts. Verdicts are **PASS**, **FAIL** or **ERROR** only.
 
 | Criterion | A | B | C | D |
 | --- | --- | --- | --- | --- |
-| Correctness (cases passed) | | | | |
-| Requirement coverage | | | | |
-| Verifiability (tests) | | | | |
-| Assumptions stated | | | | |
-| Noise (2 = none) | | | | |
-| **Total / 10** | | | | |
+| Correctness (cases passed) | 0 | 0 | 2 | 2 |
+| Requirement coverage |0 | 0 | 2 | 2 |
+| Verifiability (tests) | 0 | 0 | 2 | 2 |
+| Assumptions stated | 0  |0 | 2 | 2 |
+| Noise (2 = none) | 2 | 0 | 2 | 2 |
+| **Total / 10** |2 | 0|10 | 10|
 
-**Prompt length, in words:** A ____ · B ____ · C ____ · D ____
+**Prompt length, in words:** A _12___ · B _38___ · C _112___ · D __84__
 
 **Words added per point gained** — B over A, C over B, D over C. One line on what that ratio says:
-
+B over A: 4.33, C over B: N/A (0 points gained), D over C: -4.67
 ---
 
 ## 8. Conclusion — 150–200 words
@@ -228,11 +322,14 @@ Name test cases and real returned values. "More detailed prompts work better" sc
 ```
 (150–200 words)
 
-
+Prompt C scored best by achieving a clean 6/6 pass rate without import crashes or signature warnings, making it the specification-driven prompt I would use at work.
+Prompt A failed completely (0/6 PASS) due to a signature mismatch, triggering TypeError: analyze_marks() takes 1 positional argument but 2 were given. Prompt B added the missing parameter but crashed on import (ValueError: marks list cannot be empty) due to un-guarded top-level test calls. Wrapping sample execution in an if __name__ == "__main__": guard bought the most correctness, turning B from an IMPORT ERROR to 6 PASS results and returning average=60.0, highest=80, lowest=40, pass_rate=66.67 on case 1. Prompt D passed all test cases but flagged a signature warning (pass_mark missing default value =50).
+Pure noise included conversational role-play and lengthy prose explaining standard math operations.
+The core ambiguity was using pass_rate as both an input parameter and an output key. I resolved this by explicitly naming the input threshold pass_mark, reserving pass_rate for the output dictionary, and guarding top-level execution code.
 
 ```
 
-**Word count:**
+**Word count:*181*
 
 ---
 

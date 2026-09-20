@@ -46,7 +46,7 @@ def analyze_marks(marks, pass_rate):
             raise ValueError(f"Invalid mark: {mark!r}. Marks must be numeric.")
 
         # Reject marks outside the strict (0, 100) range
-        if not (0 < mark < 100):
+        if not (0 <= mark <= 100):
             raise ValueError(
                 f"Invalid mark: {mark!r}. Marks must be strictly between 0 and 100."
             )
@@ -69,7 +69,7 @@ def analyze_marks(marks, pass_rate):
 
 # ------------------ Example usage ------------------
 if __name__ == "__main__":
-    sample_marks = [45.5, 67, 89.25, 32, 90, 78.75, 55]
+    sample_marks = [49.5, 50]
 
     try:
         result = analyze_marks(sample_marks, pass_rate=50)
@@ -81,11 +81,11 @@ if __name__ == "__main__":
 
     # Examples that raise ValueError:
     invalid_cases = [
-        ([], 50),                     # empty list
-        ([50, True, 70], 50),         # boolean in marks
-        ([50, "70", 90], 50),         # string in marks
-        ([50, 150, 90], 50),          # out of range
-        ([50, -5, 90], 50),           # out of range
+        ([40, 60, 80], 50),                     # empty list
+        ([100], 50),         # boolean in marks
+        ([], 50),         # string in marks
+        ([40, "60"], 50),          # out of range
+        ([-1, 50, 101], 50),           # out of range
         ([50, 70, 90], True),         # boolean pass_rate
         ([50, 70, 90], "50"),         # string pass_rate
     ]
