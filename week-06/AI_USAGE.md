@@ -6,22 +6,21 @@ including anything an AI tool produced.
 
 | Tool | Exact model / plan | Used for | Which files it touched |
 | --- | --- | --- | --- |
-| Bolt.new | | prototype v1 (Task 2) | |
-| Bolt.new | | cleanup prompts (Task 4) | |
-| | | | |
+| Bolt.new | GLM 5.3 Flash | prototype v1 (Task 2) | `src/App.tsx`, `src/utils/availability.ts`, `src/types.ts`, `src/data.ts`, `package.json` |
+| Bolt.new | GLM 5.3 Flash | cleanup prompts (Task 4) | `src/App.tsx`, `src/utils/availability.ts`, `package.json` |
+| Gemini | Gemini 1.5 Pro | Report drafting and troubleshooting | `lab-report.md`, `check_prototype.py` fixes |
 
-**I used another assistant as well (to explain code, to draft text in lab-report.md, …):** yes / no
-<!-- If "yes": which one, the exact model, and for which section. -->
+**I used another assistant as well (to explain code, to draft text in lab-report.md, …):** yes
+*Used Google Gemini for resolving environment issues, guiding terminal commands, and drafting lab report sections.*
 
-**`original/` holds Bolt's first version exactly as downloaded, and `evidence/v1.png` shows it:** yes / no
+**`original/` holds Bolt's first version exactly as downloaded, and `evidence/v1.png` shows it:** yes
 
-**Every screenshot in `evidence/` is an unedited capture of the page as it behaved:** yes / no
+**Every screenshot in `evidence/` is an unedited capture of the page as it behaved:** yes
 
-**I can explain the component I chose in lab-report.md section 8 — and how the page decides
-availability — without the assistant:** yes / no
+**I can explain the component I chose in lab-report.md section 8 — and how the page decides availability — without the assistant:** yes
 
 **Anything I accepted from the AI without fully understanding it:**
-<!-- Name the file and the part. An honest entry here costs far less than a blank one that turns out to be untrue. -->
+None. All components, utility functions for time parsing, and test conditions were reviewed and verified.
 
-Signed: <your name>
-Date:
+Signed: Rustemoglu Esra Zhibek
+Date: 18.10.2026
