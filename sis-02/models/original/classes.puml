@@ -1,0 +1,38 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Student {
+    + studentId : String
+    + name : String
+}
+
+class CourseOffering {
+    + courseCode : String
+    + title : String
+    + semester : String
+    + capacity : Integer
+    + availablePlaces : Integer
+}
+
+class Enrollment {
+    + enrollmentId : String
+    + registrationDate : DateTime
+}
+
+Student "1" --> "0..*" Enrollment : makes >
+CourseOffering "1" --> "0..*" Enrollment : includes >
+
+note bottom of CourseOffering
+  **Capacity Constraint (R2):**
+  - availablePlaces <= capacity
+  - availablePlaces >= 0
+  - Total active enrollments per offering must never exceed capacity.
+end note
+
+note bottom of Enrollment
+  **Uniqueness Constraint (R3):**
+  - Composite unique key: (Student, CourseOffering)
+  - Enforces a maximum of 1 enrollment per student in the same offering.
+end note
+
+@enduml
