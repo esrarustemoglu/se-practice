@@ -353,7 +353,7 @@ prompts in place of one issue per prompt · `node_modules/` or a `.env` committe
 name no case, no AC and no file ("Bolt made mistakes and I fixed them") · a merged PR, a repo link,
 or an emailed submission.
 
----
+--- 
 
 ## 11. FAQ
 

@@ -1,8 +1,8 @@
 # Week 06 — Lab report
 
-**Name:**
-**Group:**
-**Date:**
+**Name:**Rustemoglu Esra Zhibek
+**Group:**Monday 16:00-19:00
+**Date:**18.10.2026
 
 Fill in every section. **Do not delete, rename or renumber the headings** — the checker and the
 grader find your answers by them. Add rows to any table; never remove its header.
@@ -14,9 +14,9 @@ grader find your answers by them. Add rows to any table; never remove its header
 | | |
 | --- | --- |
 | Tool | Bolt.new |
-| Exact model (as Bolt shows it, or `not displayed`) | |
+| Exact model (as Bolt shows it, or `not displayed`) | GLM 5.3 Flash|
 | Bolt project link (or `not shared`, and why) | |
-| Browser and version | |
+| Browser and version | Safari 17.6 |
 | If you could not use Bolt.new: the tool you used instead, and why | |
 
 ---
@@ -28,14 +28,20 @@ Fill the first three columns now; fill the last one after Task 3.
 
 | # | What I expect to go wrong | AC it concerns | Was I right? (after Task 3) |
 | --- | --- | --- | --- |
-| 1 | | | |
-| 2 | | | |
+| 1 | Accepts overlaps | AC4 | |
+| 2 | Allow booking longer 120 min| AC2 | |
 
 **The initial prompt exactly as I sent it** — the deck's prompt with AC1–AC6 pasted in place of
 `[paste AC1–AC6]`, nothing else changed:
 
 ```text
-(paste here)
+Build a small responsive Smart Campus Room Availability Checker. Requirements: [paste AC1–AC6]. Use fictional sample data only. Keep the implementation simple and within one-page scope. Do not add authentication, backend services, analytics, or unrelated features. After building, briefly list the main files/components you created.Acceptance criteria
+AC1: Accept a candidate interval only when 0 ≤ start < end ≤ 1440 and start is after the supplied current time.
+AC2: Reject a booking longer than 120 minutes.
+AC3: Reject the request when the selected room is blocked.
+AC4: Reject any interval that overlaps an existing booking; touching endpoints are allowed.
+AC5: Show a clear Available / Unavailable decision without changing the existing booking data.
+AC6: The page remains usable at desktop and narrow/mobile width and gives understandable validation feedback.
 ```
 
 ---
@@ -48,12 +54,24 @@ prompt: yes / no
 **Bolt's list of the files/components it created, pasted unedited:**
 
 ```text
-(paste here)
+package.json
+src/App.tsx
+src/index.css
+tailwind.config.js
+src/main.tsx
+index.html
+src.types.ts
+src/data.ts
+src/utils/availability.ts
+index.html
 ```
 
 **What v1 does — one line per thing that works, or visibly does not:**
 
--
+- Renders a clean UI with room selector, start/end time inputs, current time control, and existing bookings list.
+- Fails overlap check (T2): Evaluates 10:30–11:30 as Available even though existing bookings for A101 are 09:00–10:00 and 13:00–14:00
+- Visual decision badge shows plain-language validation feedback ("A101 is available from 10:30 to 11:30").
+- Includes a current time simulator field (546 / 09:06), allowing current time simulation.
 
 **Repair prompt** (only if the first build did not run — the deck allows one, then the result is
 v1). Leave empty if you did not need it:
