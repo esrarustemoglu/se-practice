@@ -1,3 +1,38 @@
-' SIS #02 — your FINAL sequence diagram goes here, as PlantUML (@startuml … @enduml).
-' Start from the AI's original in models/original/sequence.puml, apply your accepted review
-' decisions, then render it to models/img/sequence.png (or .svg). README section 5.
+@startuml
+autonumber
+actor Student
+participant "Portal / UI" as UI
+participant "Registration Service" as Service
+database "Database" as DB
+
+== US-01: Catalog Browsing (R1) ==
+Student -> UI: Select semester & request catalog
+UI -> Service: getCatalog(semester)
+Service -> DB: Query courses, offerings & available places
+DB --> Service: Return course list
+Service --> UI: Display catalog data
+UI --> Student: Show course code, title, offering, available places
+
+== US-02 & US-03: Registration & Rejections (R2, R3, R4, R5) ==
+Student -> UI: Select offering & submit registration
+UI -> Service: register(studentId, offeringId)
+group Atomic Operation & Validation (R2, R3, R4, R5)
+    Service -> DB: Recheck availability & duplicate status
+    alt [success: places > 0 & no existing enrollment]
+        DB --> Service: Valid for registration
+        Service -> DB: Create 1 Enrollment & decrement availablePlaces
+        DB --> Service: Success confirmation
+        Service --> UI: Return confirmation
+        UI --> Student: Display success message
+    else [course full: availablePlaces == 0]
+        DB --> Service: Offering is full
+        Service --> UI: Reject request ("course full")
+        UI --> Student: Display "course full" explanation
+    else [already enrolled: duplicate active enrollment exists]
+        DB --> Service: Enrollment already exists
+        Service --> UI: Reject request ("already enrolled")
+        UI --> Student: Display "already enrolled" explanation
+    end
+end
+
+@enduml
