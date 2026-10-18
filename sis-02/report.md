@@ -32,24 +32,24 @@
 
 ### US-01 — Browse offerings
 
-**US-01:** (write here — As a student, I want …, so that …)
+**US-01:** As an authenticated student, I want to view the course catalog for a specific semester so that I can inspect course codes, titles, offerings, and available places.
 
-- **AC-01** (R?): (write here — Given …, When …, Then …)
-- **AC-02** (R?): (write here)
+- **AC-01** (R1): Given the authenticated student selects a specific semester, When they view the course catalog, Then the system displays the course code, title, offering, and available places for that semester.
+- **AC-02** (R1): Given the course catalog is requested for a single semester, When the system retrieves the data, Then the displayed catalog entries are strictly scoped to the requested semester.
 
 ### US-02 — Register for an offering
 
-**US-02:** (write here)
+**US-02:** As an authenticated student, I want to register for an available course offering so that my enrollment is recorded and availability is updated.
 
-- **AC-03** (R?): (write here)
-- **AC-04** (R?): (write here)
+- **AC-03** (R2, R4): Given a course offering has available places, When the student submits a registration request, Then the system rechecks current availability to ensure capacity is not exceeded, creates exactly one enrollment linking the student and offering, updates the available places count, and returns a confirmation.
+- **AC-04** (R4): Given a registration request is successfully processed, When the database state is updated, Then exactly one Enrollment record is persisted and the enrollment count / available places are adjusted accordingly.
 
 ### US-03 — Receive a clear rejection
 
-**US-03:** (write here)
+**US-03:** As an authenticated student, I want the system to reject invalid registrations so that capacity limits and duplicate restrictions are properly enforced.
 
-- **AC-05** (R?): (write here)
-- **AC-06** (R?): (write here)
+- **AC-05** (R2, R5): Given a course offering has zero available places (course full), When the student attempts to register, Then the system rejects the request, explains "course full", creates no enrollment, and leaves the enrollment count unchanged.
+- **AC-06** (R3, R5): Given the student already has an active enrollment in the same course offering, When the student attempts a repeat registration request, Then the system rejects the repeat request, explains "already enrolled", creates no enrollment, and leaves the enrollment count unchanged.
 
 ## 3. Sequence diagram
 
@@ -163,9 +163,9 @@
 
 ### B1 — Requirements (Prompt A)
 
-- **Tool:** (write here)
-- **Model:** (write here)
-- **Date:** (write here)
+- **Tool:** Gemini 
+- **Model:** Gemini 1.5 Pro
+- **Date:** 18.10
 - **Purpose:** draft 3 user stories and 6 acceptance criteria
 
 <!-- Model: the exact model with its version, as the tool shows it (e.g. "GPT-5 Thinking",
@@ -175,13 +175,97 @@
 **Prompt:**
 
 ~~~~text
-(paste here)
+Act as a requirements analyst. Use only this course registration scenario and rules R1–R5: | Rule | |
+| --- | --- |
+| **R1. Catalog** | Show the course code, title, offering and available places for one semester. |
+| **R2. Capacity** | Recheck current availability when registering. Enrollment must never exceed the offering's capacity. |
+| **R3. Duplicates** | A student may have at most one enrollment in the same offering. Reject a repeat request. |
+| **R4. Success** | Create exactly one Enrollment linking the student and offering, update availability and return a confirmation. |
+| **R5. Rejection** | Explain "course full" or "already enrolled". Create no enrollment and leave the enrollment count unchanged. |. My initial assumptions are 1. The student is already authenticated and signed into the university portal before browsing and registering.
+2. The selected course offering exists in the system database and its initial capacity is a positive whole number..
+Draft 3 user stories and 2 Given / When / Then acceptance criteria for each. Use IDs US-01 to US-03 and AC-01 to AC-06. Map each criterion to rule IDs.
+Cover normal and rejection behavior. List uncertainty separately. Do not add excluded features or invent university policies.
 ~~~~
 
 **Response:**
 
 ~~~~text
-(paste here)
+As a requirements analyst, I have drafted the user stories, acceptance criteria, and mapping to rules R1–R5 based strictly on the provided scenario, initial assumptions, and rules.
+
+---
+
+## User Stories & Acceptance Criteria
+
+### US-01: Course Catalog Browsing
+
+**User Story:** As an authenticated student, I want to view the course catalog for a specific semester so that I can inspect course codes, titles, offerings, and available places.
+
+* **AC-01**
+* **Given** the authenticated student selects a specific semester,
+* **When** they view the course catalog,
+* **Then** the system displays the course code, title, offering, and available places for that semester.
+* **Rule Mapping:** R1
+
+
+* **AC-02**
+* **Given** the course catalog is requested for a single semester,
+* **When** the system retrieves the data,
+* **Then** the displayed catalog entries are strictly scoped to the requested semester.
+* **Rule Mapping:** R1
+
+
+
+---
+
+### US-02: Course Registration Execution (Normal Flow)
+
+**User Story:** As an authenticated student, I want to register for an available course offering so that my enrollment is recorded and availability is updated.
+
+* **AC-03**
+* **Given** a course offering has available places,
+* **When** the student submits a registration request,
+* **Then** the system rechecks current availability to ensure capacity is not exceeded, creates exactly one enrollment linking the student and offering, updates the available places count, and returns a confirmation.
+* **Rule Mapping:** R2, R4
+
+
+* **AC-04**
+* **Given** a registration request is successfully processed,
+* **When** the database state is updated,
+* **Then** exactly one Enrollment record is persisted and the enrollment count / available places are adjusted accordingly.
+* **Rule Mapping:** R4
+
+
+
+---
+
+### US-03: Registration Rejection Handling (Rejection Flow)
+
+**User Story:** As an authenticated student, I want the system to reject invalid registrations so that capacity limits and duplicate restrictions are properly enforced.
+
+* **AC-05**
+* **Given** a course offering has zero available places (course full),
+* **When** the student attempts to register,
+* **Then** the system rejects the request, explains "course full", creates no enrollment, and leaves the enrollment count unchanged.
+* **Rule Mapping:** R2, R5
+
+
+* **AC-06**
+* **Given** the student already has an active enrollment in the same course offering,
+* **When** the student attempts a repeat registration request,
+* **Then** the system rejects the repeat request, explains "already enrolled", creates no enrollment, and leaves the enrollment count unchanged.
+* **Rule Mapping:** R3, R5
+
+
+
+---
+
+## List of Uncertainties
+
+Based strictly on the provided rules and assumptions, the following items remain unspecified and would require clarification from domain stakeholders:
+
+* **Concurrency & Race Conditions:** How the system handles simultaneous registration requests when only one available place remains.
+* **Exact Interface Messaging:** The precise wording or UI component layout required for the "course full" and "already enrolled" explanations.
+* **Initial Seeding:** The exact mechanism by which the initial positive whole number capacity and available places are established for a semester's offering.
 ~~~~
 
 ### B2 — UML drafts (Prompt B)

@@ -1,0 +1,48 @@
+@startuml
+autonumber
+actor Student
+participant "Portal / UI" as UI
+participant "Registration Service" as Service
+database "Database" as DB
+
+== US-01: Catalog Browsing (R1) ==
+Student -> UI: Select semester & request catalog
+UI -> Service: getCatalog(semester)
+Service -> DB: Query courses, offerings & available places
+DB --> Service: Return course list
+Service --> UI: Display catalog data
+UI --> Student: Show course code, title, offering, available places
+
+== US-02: Guarded Success Registration (R2, R4) ==
+Student -> UI: Select offering & submit registration
+UI -> Service: register(studentId, offeringId)
+group Atomic Operation (R2, R4)
+    Service -> DB: Recheck availability & duplicate status
+    DB --> Service: Offering has places > 0 & no existing enrollment
+    Service -> DB: Create 1 Enrollment & decrement availablePlaces
+    DB --> Service: Success confirmation
+end
+Service --> UI: Return confirmation
+UI --> Student: Display success message
+
+== US-03: Rejection - Course Full (R2, R5) ==
+Student -> UI: Submit registration for full offering
+UI -> Service: register(studentId, offeringId)
+group Atomic Check (R2, R5)
+    Service -> DB: Recheck availability (availablePlaces == 0)
+    DB --> Service: Offering is full
+end
+Service --> UI: Reject request (no enrollment created, count unchanged)
+UI --> Student: Display "course full" explanation
+
+== US-03: Rejection - Already Enrolled (R3, R5) ==
+Student -> UI: Submit repeat registration
+UI -> Service: register(studentId, offeringId)
+group Atomic Check (R3, R5)
+    Service -> DB: Check existing enrollment for student & offering
+    DB --> Service: Enrollment already exists
+end
+Service --> UI: Reject repeat request (no enrollment created, count unchanged)
+UI --> Student: Display "already enrolled" explanation
+
+@enduml
